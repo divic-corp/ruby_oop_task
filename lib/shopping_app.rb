@@ -2,62 +2,72 @@ require_relative "shopping_app/seller"
 require_relative "shopping_app/item"
 require_relative "shopping_app/customer"
 
-seller = Seller.new("DICストア")
-10.times{ Item.new(1, "CPU", 40830, seller) }
-10.times{ Item.new(2, "メモリー", 13880, seller) }
-10.times{ Item.new(3, "マザーボード", 28980, seller) }
-10.times{ Item.new(4, "電源ユニット", 8980, seller) }
-10.times{ Item.new(5, "PCケース", 8727, seller) }
-10.times{ Item.new(6, "3.5インチHDD", 10980, seller) }
-10.times{ Item.new(7, "2.5インチSSD", 13370, seller) }
-10.times{ Item.new(8, "M.2 SSD", 12980, seller) }
-10.times{ Item.new(9, "CPUクーラー", 13400, seller) }
-10.times{ Item.new(10, "グラフィックボード", 23800, seller) }
+# Setup seller and inventory
+seller = Seller.new("DIC Store")
+10.times { seller.add_item(Item.new(1, "CPU", 40830, 10, seller)) }
+10.times { seller.add_item(Item.new(2, "Memory", 13880, 10, seller)) }
+10.times { seller.add_item(Item.new(3, "Motherboard", 28980, 10, seller)) }
+10.times { seller.add_item(Item.new(4, "Power Supply Unit", 8980, 10, seller)) }
+10.times { seller.add_item(Item.new(5, "PC Case", 8727, 10, seller)) }
+10.times { seller.add_item(Item.new(6, "3.5-inch HDD", 10980, 10, seller)) }
+10.times { seller.add_item(Item.new(7, "2.5-inch SSD", 13370, 10, seller)) }
+10.times { seller.add_item(Item.new(8, "M.2 SSD", 12980, 10, seller)) }
+10.times { seller.add_item(Item.new(9, "CPU Cooler", 13400, 10, seller)) }
+10.times { seller.add_item(Item.new(10, "Graphics Card", 23800, 10, seller)) }
 
-puts "🤖 あなたの名前を教えてください"
+# Ask customer details
+puts "🤖 Please tell me your name"
 customer = Customer.new(gets.chomp)
 
-puts "🏧 ウォレットにチャージする金額を入力にしてください"
+puts "🏧 Enter the amount to charge to your wallet"
 customer.wallet.deposit(gets.chomp.to_i)
 
-puts "🛍️ ショッピングを開始します"
+puts "🛍️ Shopping begins!"
 end_shopping = false
-while !end_shopping do
-  puts "📜 商品リスト"
+
+while !end_shopping
+  puts "📜 Product List"
   seller.items_list
 
-  puts "️️⛏ 商品番号を入力してください"
-  number = gets.to_i
+  puts "⛏ Enter product ID"
+  id = gets.to_i
 
-  puts "⛏ 商品数量を入力してください"
+  puts "⛏ Enter product quantity"
   quantity = gets.to_i
 
-  items = seller.pick_items(number, quantity)
+  items = seller.pick_items(id, quantity)
+  if items
+    customer.cart.add(items.first, quantity)
+    puts "✅ Added #{quantity} × #{items.first.name} to your cart."
+  else
+    puts "⚠️ Item not found or insufficient stock."
+  end
 
-  items&.each{|item| customer.cart.add(item) }
-
-  puts "🛒 カートの中身"
+  puts "🛒 Cart contents"
   customer.cart.items_list
-  puts "🤑 合計金額: #{customer.cart.total_amount}"
+  puts "🤑 Total amount: #{customer.cart.total_amount}"
 
-  puts "😭 買い物を終了しますか？(yes/no)"
-  end_shopping = gets.chomp == "yes"
+  puts "😭 Do you want to finish shopping? (yes/no)"
+  end_shopping = gets.chomp.downcase == "yes"
 end
 
-puts "💸 購入を確定しますか？(yes/no)"
-customer.cart.check_out if gets.chomp == "yes"
+puts "💸 Do you want to confirm the purchase? (yes/no)"
+customer.cart.check_out if gets.chomp.downcase == "yes"
 
-puts "୨୧┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈結果┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈୨୧"
-puts "️🛍️ ️#{customer.name}の所有物"
+# Final report
+puts "୨୧┈┈┈┈┈┈┈┈┈┈┈┈┈Result┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈୨୧"
+puts "🛍️ Items owned by #{customer.name}"
 customer.items_list
-puts "😱👛 #{customer.name}のウォレット残高: #{customer.wallet.balance}"
 
-puts "📦 #{seller.name}の在庫状況"
+puts "👛 #{customer.name}'s wallet balance: #{customer.wallet.balance}"
+
+puts "📦 #{seller.name}'s stock status"
 seller.items_list
-puts "😻👛 #{seller.name}のウォレット残高: #{seller.wallet.balance}"
 
-puts "🛒 カートの中身"
+puts "👛 #{seller.name}'s wallet balance: #{seller.wallet.balance}"
+
+puts "🛒 Cart contents"
 customer.cart.items_list
-puts "🌚 合計金額: #{customer.cart.total_amount}"
+puts "🌚 Total amount: #{customer.cart.total_amount}"
 
-puts "🎉 終了"
+puts "🎉 End"

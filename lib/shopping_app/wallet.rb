@@ -1,4 +1,7 @@
+require_relative "ownable"
+
 class Wallet
+  attr_accessor :owner 
   attr_reader :balance
 
   def initialize(owner)

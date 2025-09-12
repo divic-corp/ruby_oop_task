@@ -1,7 +1,9 @@
 require_relative "user"
 require_relative "cart"
+require_relative "ownable"
 
 class Customer < User
+  include Ownable
   attr_reader :cart
 
   def initialize(name)

@@ -1,4 +1,13 @@
-# モジュールの役割について確認したい場合は[https://diver.diveintocode.jp/curriculums/2360]のテキストを参考にしてください。
+
 module Ownable
-  attr_accessor :owner
+  attr_reader :items
+
+  def initialize(*args)
+    super  # Call parent initialize if needed
+    @items ||= []  # Initialize empty array if not already set
+  end
+
+  def add_item(item)
+    @items << item
+  end
 end
