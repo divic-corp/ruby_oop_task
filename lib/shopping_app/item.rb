@@ -1,25 +1,20 @@
+require "terminal-table"  # If not already there
+
 class Item
-  attr_reader :number, :name, :price
+  attr_accessor :number, :name, :price, :quantity, :owner  # Add :owner here
 
-  @@instances = []
-
-  def initialize(number, name, price, owner=nil)
+  def initialize(number, name, price, quantity = 1, owner = nil)
     @number = number
     @name = name
     @price = price
-    self.owner = owner
-
-    # Itemインスタンスの生成時、そのItemインスタンス(self)は、@@insntancesというクラス変数に格納されます。
-    @@instances << self
+    @quantity = quantity
+    self.owner = owner  # This now works
   end
 
+  def id
+    @number
+  end
   def label
-    { number: number, name: name, price: price }
+    [id, @name, @price, @quantity]  # For table rows in items_list
   end
-
-  def self.all
-    #　@@instancesを返します ==> Item.allでこれまでに生成されたItemインスタンスを全て返すということです。
-    @@instances
-  end
-
 end

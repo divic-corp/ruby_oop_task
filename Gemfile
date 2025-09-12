@@ -5,3 +5,4 @@ gem "kosi" # https://github.com/tbpgr/kosi
 gem "rexml"
 gem "rspec"
 gem "factory_bot"
+gem "terminal-table"
