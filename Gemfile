@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-ruby "4.0.5"
+ruby "4.0.6"
 
 gem "kosi", "~> 1.0.1" # https://github.com/tbpgr/kosi
 gem "rexml", "~> 3.4"
