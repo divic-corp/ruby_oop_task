@@ -47,6 +47,15 @@ jobs:
           git clone https://github.com/seiyamiyaoka/cdp_web_ruby_oop_task_evaluation_code.git spec
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+      - name: Verify starter evaluation baseline
+        run: |
+          set +e
+          output="$(bundle exec rspec 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -F "48 examples, 41 failures"
       - name: Create Feedback
         run: |
           bundle exec rspec -r ./spec/my_formatter.rb -f MyFormatter -o .github/feedback_template.md
