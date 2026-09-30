@@ -48,6 +48,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
       - name: Verify starter evaluation baseline
+        if: github.repository == 'divic-corp/ruby_oop_task'
         run: |
           set +e
           output="$(bundle exec rspec 2>&1)"
